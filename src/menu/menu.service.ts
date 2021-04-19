@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateMenuDto } from './dto/create-menu.dto';
@@ -13,8 +13,26 @@ export class MenuService {
     private menuModel: typeof Menu,
   ) { }
 
-  create(createMenuDto: CreateMenuDto) {
-    return 'This action adds a new menu';
+  async create(createMenuDto: CreateMenuDto): Promise<Menu | false> {
+    const createdMenu = new this.menuModel({
+      id: createMenuDto.id,
+      name: createMenuDto.name,
+      m_category_menu: createMenuDto.m_category_menu,
+      price: createMenuDto.price,
+      stock: createMenuDto.stock,
+      image: createMenuDto.image,
+      menu_details: createMenuDto.menu_details,
+      discount: createMenuDto.discount,
+      recomend: createMenuDto.recomend
+    })
+
+    try {
+      await createdMenu.save()
+      return createdMenu
+    } catch (error) {
+      return false
+    }
+
   }
 
 

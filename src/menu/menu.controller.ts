@@ -4,19 +4,28 @@ import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { Menu } from './menu.model';
 import { Response, ErrorResponse } from '../library';
+import { json } from 'sequelize';
 
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) { }
 
   @Post()
-  create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
+  async create(@Body() createMenuDto: CreateMenuDto) {
+    const response = await this.menuService.create(createMenuDto);
+    if (response === false) {
+      return ErrorResponse('Error Insert Data', 500);
+
+    } else {
+      return Response(response, 'Successfully Added', 201);
+
+    }
   }
 
   @Get()
-  getMenu() {
-    return this.menuService.findAll();
+  async getMenu() {
+    const response = await this.menuService.findAll();
+    return Response(response, 'Success', 200);
   }
 
   @Get(':id')
@@ -26,7 +35,6 @@ export class MenuController {
       return Response(response, 'Success', 200);
     } else {
       return Response(null, 'Data Not Found!', 204);
-
     }
 
   }
