@@ -56,3 +56,15 @@ export class CreateMenuDto {
     recomend?: number;
 
 }
+
+export class CreateMenuImage {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Buffer;
+}
+
+//  class CreateMenuImage {
+//     file: Images[];
+// }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles, } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
@@ -6,13 +6,22 @@ import { Menu } from './menu.model';
 import { Response, ErrorResponse } from '../library';
 import { json } from 'sequelize';
 
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
+
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) { }
 
   @Post()
-  async create(@Body() createMenuDto: CreateMenuDto) {
-    const response = await this.menuService.create(createMenuDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createMenuDto: CreateMenuDto
+  ) {
+    const response = await this.menuService.create(file, createMenuDto);
     if (response === false) {
       return ErrorResponse('Error Insert Data', 500);
 
