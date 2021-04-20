@@ -15,7 +15,6 @@ export class MenuService {
 
   async create(file: CreateMenuImage, createMenuDto: CreateMenuDto): Promise<Menu | false> {
     const createdMenu = new this.menuModel({
-      id: createMenuDto.id,
       name: createMenuDto.name,
       m_category_menu: createMenuDto.m_category_menu,
       price: createMenuDto.price,

@@ -15,11 +15,10 @@ import {
     MaxLength,
     isAlphanumeric,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateMenuDto {
     // @IsOptional()
-    @IsNumber()
-    id?: number;
 
     @IsNotEmpty()
     @MinLength(5)
@@ -28,14 +27,17 @@ export class CreateMenuDto {
     name?: string;
 
     // @IsOptional()
+    @Type(() => Number)
     @IsNumber()
     m_category_menu?: number;
 
     // @IsOptional()
+    @Type(() => Number)
     @IsNumber()
     price?: number;
 
     // @IsOptional()
+    @Type(() => Number)
     @IsNumber()
     stock?: number;
 
@@ -48,10 +50,12 @@ export class CreateMenuDto {
     menu_details?: string;
 
     // @IsOptional()
+    @Type(() => Number)
     @IsNumber()
     discount?: number;
 
     // @IsOptional()
+    @Type(() => Number)
     @IsNumber()
     recomend?: number;
 

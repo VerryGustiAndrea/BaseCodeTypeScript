@@ -21,6 +21,9 @@ export class MenuController {
     @UploadedFile() file: Express.Multer.File,
     @Body() createMenuDto: CreateMenuDto
   ) {
+    if (!file) {
+      return ErrorResponse('Error Image not found', 500);
+    }
     const response = await this.menuService.create(file, createMenuDto);
     if (response === false) {
       return ErrorResponse('Error Insert Data', 500);
