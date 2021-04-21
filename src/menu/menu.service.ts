@@ -1,5 +1,7 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { exec } from 'node:child_process';
+import { exception } from 'node:console';
 
 import { CreateMenuDto, CreateMenuImage } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
@@ -74,6 +76,7 @@ export class MenuService {
   }
 
   async update(id: number, updateMenuDto: UpdateMenuDto): Promise<{} | false> {
+
     const updatedMenu = {
       name: updateMenuDto.name,
       m_category_menu: Number(updateMenuDto.m_category_menu),
@@ -93,7 +96,15 @@ export class MenuService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} menu`;
+  async remove(id: number) {
+
+    try {
+      const execute = await this.menuModel.destroy({ where: { id: id } })
+      console.log(execute)
+      return true
+    } catch (error) {
+      return false
+    }
+    // return `This action removes a #${id} menu`;
   }
 }

@@ -76,11 +76,16 @@ export class MenuController {
     // if (!file) {
     // return ErrorResponse('Error Image not found', 500);
     // }
-    return this.menuService.update(id, updateMenuDto);
+    return await this.menuService.update(id, updateMenuDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.menuService.remove(+id);
+  async remove(@Param('id') id: number) {
+    const execute = await this.menuService.remove(+id);
+    if (execute == false) {
+      return ErrorResponse('Error Delete Data', 500);
+    } else if (execute == true) {
+      return Response(null, 'Successfully Deleted', 201);
+    }
   }
 }
