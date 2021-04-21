@@ -76,7 +76,12 @@ export class MenuController {
     // if (!file) {
     // return ErrorResponse('Error Image not found', 500);
     // }
-    return await this.menuService.update(id, updateMenuDto);
+    const execute = await this.menuService.update(id, updateMenuDto);
+    if (execute == false) {
+      return ErrorResponse('Error Update Data', 500);
+    } else if (execute) {
+      return Response(execute, 'Successfully Update Data', 200);
+    }
   }
 
   @Delete(':id')

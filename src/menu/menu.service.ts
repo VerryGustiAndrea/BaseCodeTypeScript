@@ -36,7 +36,6 @@ export class MenuService {
     if (response.length == 0) {
       return false
     } else if (response) {
-      console.log("disini")
       return response
     } else {
       return false
@@ -90,6 +89,7 @@ export class MenuService {
 
     try {
       const execute = await this.menuModel.update(updatedMenu, { where: { id: id } });
+      console.log(execute)
       return updatedMenu
     } catch (error) {
       return false
