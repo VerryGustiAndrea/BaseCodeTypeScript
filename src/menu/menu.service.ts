@@ -13,6 +13,46 @@ export class MenuService {
     private menuModel: typeof Menu,
   ) { }
 
+
+
+
+  async findAll(): Promise<Menu[]> {
+    return this.menuModel.findAll();
+  }
+
+  async findOne(id: number): Promise<Menu | false> {
+    const response = await this.menuModel.findOne({ where: { id: id } });
+    if (response) {
+      return response
+    } else {
+      return false
+    }
+  }
+
+  async getMenuRecomend(): Promise<Menu[] | false> {
+    const response = await this.menuModel.findAll({ where: { recomend: 1 } });
+    if (response.length == 0) {
+      return false
+    } else if (response) {
+      console.log("disini")
+      return response
+    } else {
+      return false
+    }
+  }
+
+  async findByCategory(id: number): Promise<Menu[] | false> {
+    const response = await this.menuModel.findAll({ where: { m_category_menu: id } });
+    if (response.length == 0) {
+      return false
+    } else if (response) {
+      console.log("disini")
+      return response
+    } else {
+      return false
+    }
+  }
+
   async create(file: CreateMenuImage, createMenuDto: CreateMenuDto): Promise<Menu | false> {
     const createdMenu = new this.menuModel({
       name: createMenuDto.name,
@@ -31,25 +71,26 @@ export class MenuService {
     } catch (error) {
       return false
     }
-
   }
 
+  async update(id: number, updateMenuDto: UpdateMenuDto): Promise<{} | false> {
+    const updatedMenu = {
+      name: updateMenuDto.name,
+      m_category_menu: Number(updateMenuDto.m_category_menu),
+      price: Number(updateMenuDto.price),
+      stock: Number(updateMenuDto.stock),
+      image: 'file.originalname',
+      menu_details: updateMenuDto.menu_details,
+      discount: Number(updateMenuDto.discount),
+      recomend: Number(updateMenuDto.recomend)
+    }
 
-  async findAll(): Promise<Menu[]> {
-    return this.menuModel.findAll();
-  }
-
-  async findOne(id: number): Promise<Menu | false> {
-    const response = await this.menuModel.findOne({ where: { id: id } });
-    if (response) {
-      return response
-    } else {
+    try {
+      const execute = await this.menuModel.update(updatedMenu, { where: { id: id } });
+      return updatedMenu
+    } catch (error) {
       return false
     }
-  }
-
-  update(id: number, updateMenuDto: UpdateMenuDto) {
-    return `This action updates a #${id} menu`;
   }
 
   remove(id: number) {

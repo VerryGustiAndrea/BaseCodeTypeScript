@@ -15,24 +15,7 @@ import {
 export class MenuController {
   constructor(private readonly menuService: MenuService) { }
 
-  @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() createMenuDto: CreateMenuDto
-  ) {
-    if (!file) {
-      return ErrorResponse('Error Image not found', 500);
-    }
-    const response = await this.menuService.create(file, createMenuDto);
-    if (response === false) {
-      return ErrorResponse('Error Insert Data', 500);
 
-    } else {
-      return Response(response, 'Successfully Added', 201);
-
-    }
-  }
 
   @Get()
   async getMenu() {
@@ -48,12 +31,52 @@ export class MenuController {
     } else {
       return Response(null, 'Data Not Found!', 204);
     }
+  }
 
+  @Get('recomend')
+  async getMenuRecomend() {
+    const response = await this.menuService.getMenuRecomend();
+    if (response !== false) {
+      return Response(response, 'Success', 200);
+    } else {
+      return Response(null, 'Data Not Found!', 204);
+    }
+  }
+
+  @Get('category/:id')
+  async findByCategory(@Param('id') id: string) {
+    const response = await this.menuService.findByCategory(+id);
+    if (response !== false) {
+      return Response(response, 'Success', 200);
+    } else {
+      return Response(null, 'Data Not Found!', 204);
+    }
+  }
+
+  @Post()
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createMenuDto: CreateMenuDto
+  ) {
+    if (!file) {
+      return ErrorResponse('Error Image not found', 500);
+    }
+    const response = await this.menuService.create(file, createMenuDto);
+    if (response === false) {
+      return ErrorResponse('Error Insert Data', 500);
+    } else {
+      return Response(response, 'Successfully Added', 201);
+
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(+id, updateMenuDto);
+  async update(@Param('id') id: number, @Body() updateMenuDto: UpdateMenuDto) {
+    // if (!file) {
+    // return ErrorResponse('Error Image not found', 500);
+    // }
+    return this.menuService.update(id, updateMenuDto);
   }
 
   @Delete(':id')

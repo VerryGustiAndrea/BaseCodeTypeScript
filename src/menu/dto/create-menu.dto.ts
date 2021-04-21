@@ -18,6 +18,11 @@ import {
 import { Type } from 'class-transformer';
 
 export class CreateMenuDto {
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    id?: number;
     // @IsOptional()
 
     @IsNotEmpty()
