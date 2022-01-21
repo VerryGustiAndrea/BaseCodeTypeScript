@@ -13,7 +13,7 @@ import {
 } from 'sequelize-typescript';
 
 @Table
-export class Menu extends Model {
+export class Merchant extends Model {
   // @ApiProperty()
   @AutoIncrement
   @PrimaryKey

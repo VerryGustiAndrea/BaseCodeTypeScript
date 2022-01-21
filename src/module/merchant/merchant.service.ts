@@ -1,29 +1,27 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { exec } from 'node:child_process';
-import { exception } from 'node:console';
 
-import { CreateMenuDto, CreateMenuImage } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
-import { Menu } from './menu.model';
+import { CreateMenuDto, CreateMenuImage } from './dto/create-merchant.dto';
+import { UpdateMenuDto } from './dto/update-merchant.dto';
+import { Merchant } from './merchant.model';
 
 
 @Injectable()
-export class MenuService {
+export default class MerchantService {
   constructor(
-    @InjectModel(Menu)
-    private menuModel: typeof Menu,
+    @InjectModel(Merchant)
+    private merchantModel: typeof Merchant,
   ) { }
 
 
 
 
-  async findAll(): Promise<Menu[]> {
-    return this.menuModel.findAll();
+  async findAll(): Promise<Merchant[]> {
+    return this.merchantModel.findAll();
   }
 
-  async findOne(id: number): Promise<Menu | false> {
-    const response = await this.menuModel.findOne({ where: { id: id } });
+  async findOne(id: number): Promise<Merchant | false> {
+    const response = await this.merchantModel.findOne({ where: { id: id } });
     if (response) {
       return response
     } else {
@@ -31,8 +29,8 @@ export class MenuService {
     }
   }
 
-  async getMenuRecomend(): Promise<Menu[] | false> {
-    const response = await this.menuModel.findAll({ where: { recomend: 1 } });
+  async getMenuRecomend(): Promise<Merchant[] | false> {
+    const response = await this.merchantModel.findAll({ where: { recomend: 1 } });
     if (response.length == 0) {
       return false
     } else if (response) {
@@ -42,8 +40,8 @@ export class MenuService {
     }
   }
 
-  async findByCategory(id: number): Promise<Menu[] | false> {
-    const response = await this.menuModel.findAll({ where: { m_category_menu: id } });
+  async findByCategory(id: number): Promise<Merchant[] | false> {
+    const response = await this.merchantModel.findAll({ where: { m_category_menu: id } });
     if (response.length == 0) {
       return false
     } else if (response) {
@@ -54,8 +52,8 @@ export class MenuService {
     }
   }
 
-  async create(file: CreateMenuImage, createMenuDto: CreateMenuDto): Promise<Menu | false> {
-    const createdMenu = new this.menuModel({
+  async create(file: CreateMenuImage, createMenuDto: CreateMenuDto): Promise<Merchant | false> {
+    const createdMenu = new this.merchantModel({
       name: createMenuDto.name,
       m_category_menu: createMenuDto.m_category_menu,
       price: createMenuDto.price,
@@ -88,7 +86,7 @@ export class MenuService {
     }
 
     try {
-      const execute = await this.menuModel.update(updatedMenu, { where: { id: id } });
+      const execute = await this.merchantModel.update(updatedMenu, { where: { id: id } });
       console.log(execute)
       return updatedMenu
     } catch (error) {
@@ -99,7 +97,7 @@ export class MenuService {
   async remove(id: number) {
 
     try {
-      const execute = await this.menuModel.destroy({ where: { id: id } })
+      const execute = await this.merchantModel.destroy({ where: { id: id } })
       console.log(execute)
       return true
     } catch (error) {

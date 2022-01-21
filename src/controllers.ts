@@ -1,0 +1,1 @@
+export { default as MerchantController } from '@/module/merchant/merchant.controller';

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Menu } from './menu/menu.model';
+import { Merchant } from './module/merchant/merchant.model';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { MenuModule } from './menu/menu.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -20,7 +19,8 @@ import { ConfigModule } from '@nestjs/config';
     // models: [Menu],
     autoLoadModels: true,
     synchronize: true,
-  }), MenuModule
+  }),
+    // MenuModule
   ],
   controllers: [AppController],
   providers: [AppService],

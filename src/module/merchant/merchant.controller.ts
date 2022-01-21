@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles, } from '@nestjs/common';
-import { MenuService } from './menu.service';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
-import { Menu } from './menu.model';
-import { Response, ErrorResponse } from '../library';
+import { MerchantService } from '@/services';
+import { CreateMenuDto } from './dto/create-merchant.dto';
+import { UpdateMenuDto } from './dto/update-merchant.dto';
+import { Merchant } from './merchant.model';
+import { Response, ErrorResponse } from '../../library';
 import { json } from 'sequelize';
 
 import {
@@ -11,21 +11,21 @@ import {
   FileInterceptor,
 } from '@nestjs/platform-express';
 
-@Controller('menu')
-export class MenuController {
-  constructor(private readonly menuService: MenuService) { }
+@Controller('merchant')
+export default class MerchantController {
+  constructor(private readonly merchantService: MerchantService) { }
 
 
 
   @Get()
   async getMenu() {
-    const response = await this.menuService.findAll();
+    const response = await this.merchantService.findAll();
     return Response(response, 'Success', 200);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const response = await this.menuService.findOne(+id);
+    const response = await this.merchantService.findOne(+id);
     if (response !== false) {
       return Response(response, 'Success', 200);
     } else {
@@ -35,7 +35,7 @@ export class MenuController {
 
   @Get('recomend')
   async getMenuRecomend() {
-    const response = await this.menuService.getMenuRecomend();
+    const response = await this.merchantService.getMenuRecomend();
     if (response !== false) {
       return Response(response, 'Success', 200);
     } else {
@@ -45,7 +45,7 @@ export class MenuController {
 
   @Get('category/:id')
   async findByCategory(@Param('id') id: string) {
-    const response = await this.menuService.findByCategory(+id);
+    const response = await this.merchantService.findByCategory(+id);
     if (response !== false) {
       return Response(response, 'Success', 200);
     } else {
@@ -62,7 +62,7 @@ export class MenuController {
     if (!file) {
       return ErrorResponse('Error Image not found', 500);
     }
-    const response = await this.menuService.create(file, createMenuDto);
+    const response = await this.merchantService.create(file, createMenuDto);
     if (response === false) {
       return ErrorResponse('Error Insert Data', 500);
     } else {
@@ -76,7 +76,7 @@ export class MenuController {
     // if (!file) {
     // return ErrorResponse('Error Image not found', 500);
     // }
-    const execute = await this.menuService.update(id, updateMenuDto);
+    const execute = await this.merchantService.update(id, updateMenuDto);
     if (execute == false) {
       return ErrorResponse('Error Update Data', 500);
     } else if (execute) {
@@ -86,7 +86,7 @@ export class MenuController {
 
   @Delete(':id')
   async remove(@Param('id') id: number) {
-    const execute = await this.menuService.remove(+id);
+    const execute = await this.merchantService.remove(+id);
     if (execute == false) {
       return ErrorResponse('Error Delete Data', 500);
     } else if (execute == true) {
